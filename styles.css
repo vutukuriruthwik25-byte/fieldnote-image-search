@@ -61,6 +61,11 @@ h1 em { color: var(--forest); font-weight: 400; }
 .result-count { color: var(--ink-soft); font-size: 11px; }
 .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; min-height: 0; }
 .empty-state { min-height: 304px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 18px; padding: 36px 20px; overflow: hidden; border: 1px solid var(--line); background: #f7f4ec; text-align: center; }
+.empty-state[data-state="loading"] .empty-sun { display: inline-block; animation: fieldnote-spin 1s linear infinite; }
+.empty-state[data-state="loading"] { border-color: #a8bd83; }
+.empty-state[data-state="error"] { border-color: #df9a47; }
+@keyframes fieldnote-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .empty-state[data-state="loading"] .empty-sun { animation-duration: 2.5s; } }
 .empty-state::before, .empty-state::after { content: ""; position: absolute; width: 150px; height: 150px; border: 1px solid #ded9ca; border-radius: 50%; }
 .empty-state::before { left: -65px; bottom: -98px; }
 .empty-state::after { right: -78px; top: -104px; width: 210px; height: 210px; }

@@ -3,6 +3,10 @@ const input = document.getElementById("search-input");
 const results = document.getElementById("results");
 const resultCount = document.getElementById("result-count");
 const emptyState = document.getElementById("empty-state");
+const emptyIcon = document.getElementById("empty-icon");
+const emptyKicker = document.getElementById("empty-kicker");
+const emptyTitle = document.getElementById("empty-title");
+const emptyCopy = document.getElementById("empty-copy");
 const quickPicks = document.querySelectorAll(".chip");
 
 async function searchImages(query) {
@@ -20,15 +24,26 @@ async function searchImages(query) {
   return Object.values(data.query?.pages ?? {});
 }
 
+function showMessage(state, kicker, title, copy, count) {
+  results.innerHTML = "";
+  emptyState.hidden = false;
+  emptyState.dataset.state = state;
+  emptyIcon.textContent = state === "loading" ? "◌" : state === "error" ? "!" : "✳";
+  emptyKicker.textContent = kicker;
+  emptyTitle.textContent = title;
+  emptyCopy.textContent = copy;
+  resultCount.textContent = count;
+}
+
 function renderResults(items, query) {
   const renderableItems = items.filter((item) => item.imageinfo?.[0]?.thumburl);
   results.innerHTML = "";
-  emptyState.hidden = renderableItems.length > 0;
 
   if (renderableItems.length === 0) {
-    resultCount.textContent = `No images found for “${query}”.`;
+    showMessage("empty", "A quiet corner of the map", "No images found.", `We couldn't find “${query}”. Try another topic and keep exploring.`, "No matches this time");
     return;
   }
+  emptyState.hidden = true;
 
   renderableItems.forEach((item) => {
     const imageInfo = item.imageinfo[0];
@@ -68,13 +83,12 @@ form.addEventListener("submit", async (event) => {
   const query = input.value.trim();
   if (!query) return;
 
+  showMessage("loading", "Searching the collection", "Gathering your finds…", "Fieldnote is looking through Wikimedia Commons for a little inspiration.", `Searching for “${query}”…`);
   try {
     const items = await searchImages(query);
     renderResults(items, query);
   } catch (error) {
-    results.innerHTML = "";
-    emptyState.hidden = false;
-    resultCount.textContent = "Could not load results. Please try again.";
+    showMessage("error", "A small interruption", "We couldn't load those images.", "Please check your connection and try the search again.", "Search interrupted");
     console.error(error);
   }
 });
@@ -89,5 +103,10 @@ quickPicks.forEach((chip) => {
 form.addEventListener("reset", () => {
   results.innerHTML = "";
   emptyState.hidden = false;
+  emptyState.dataset.state = "idle";
+  emptyIcon.textContent = "✳";
+  emptyKicker.textContent = "A blank page, full of possibility";
+  emptyTitle.innerHTML = "Search to see<br>what you find.";
+  emptyCopy.textContent = "Enter a topic above and your visual collection will take shape here.";
   resultCount.textContent = "Your finds will live here";
 });
