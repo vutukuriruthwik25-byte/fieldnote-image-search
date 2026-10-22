@@ -111,3 +111,10 @@ h1 em { color: var(--forest); font-weight: 400; }
   .empty-state { min-height: 270px; }
   .site-footer { font-size: 7px; letter-spacing: .09em; }
 }
+[hidden] { display: none !important; }
+.image-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); background: var(--white); }
+.image-card-link { display: block; overflow: hidden; background: var(--paper-deep); }
+.image-card-photo { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 220ms ease; }
+.image-card-link:hover .image-card-photo { transform: scale(1.035); }
+.image-card-link:focus-visible { outline: 3px solid var(--sun); outline-offset: -3px; }
+.image-card-title { display: -webkit-box; min-height: 42px; margin: 0; padding: 11px 13px 12px; overflow: hidden; color: var(--ink); font-family: Georgia, serif; font-size: 13px; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
